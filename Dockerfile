@@ -1,6 +1,8 @@
 ARG BASE_IMAGE=us-central1-docker.pkg.dev/votos-app-99/odoo/odoo19-enterprise:v1
 FROM ${BASE_IMAGE}
 
+ARG BASE_IMAGE
+
 USER root
 
 RUN mkdir -p /mnt/extra-addons/github-addons
