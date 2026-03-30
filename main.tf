@@ -19,18 +19,16 @@ resource "google_project_iam_member" "cloudbuild_registry" {
   member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
-resource "google_cloudbuild_trigger" "odoo_custom_trigger" {
-  name        = "odoo-github-deploy"
-  description = "Despliegue automático de módulos personalizados"
-  location    = "us-central1" # Cámbialo si tu clúster está en otra región
+# Permiso para que la cuenta escriba logs (Soluciona el error de Logging)
+resource "google_project_iam_member" "cloudbuild_logging" {
+  project = "votos-app-99"
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:github-deploy@votos-app-99.iam.gserviceaccount.com"
+}
 
-  repository_event_config {
-    # Este es el ID de la conexión de 2da generación
-    repository = "projects/votos-app-99/locations/us-central1/connections/github-conn/repositories/odoo-custom-addons"
-    push {
-      branch = "^master$"
-    }
-  }
-
-  filename = "cloudbuild.yaml"
+# Permiso para que la cuenta maneje el clúster (Soluciona el error de kubectl)
+resource "google_project_iam_member" "cloudbuild_gke_admin_custom" {
+  project = "votos-app-99"
+  role    = "roles/container.developer"
+  member  = "serviceAccount:github-deploy@votos-app-99.iam.gserviceaccount.com"
 }
