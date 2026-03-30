@@ -1,0 +1,26 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '--build-arg', 'BASE_IMAGE=$_BASE_IMAGE',
+      '-t', 'us-central1-docker.pkg.dev/votos-app-99/odoo/odoo19-custom:$SHORT_SHA',
+      '.'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/votos-app-99/odoo/odoo19-custom:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - 'set'
+      - 'image'
+      - 'deployment/odoo-app'
+      - 'odoo=us-central1-docker.pkg.dev/votos-app-99/odoo/odoo19-custom:$SHORT_SHA'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=$_REGION'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=$_CLUSTER_NAME'
+
+substitutions:
+  _REGION: us-central1
+  _CLUSTER_NAME: odoo-cluster
+  _BASE_IMAGE: us-central1-docker.pkg.dev/votos-app-99/odoo/odoo19-enterprise:v1
