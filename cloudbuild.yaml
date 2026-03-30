@@ -1,4 +1,5 @@
 steps:
+  # 1. Construir
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
@@ -7,9 +8,11 @@ steps:
       '.'
     ]
 
+  # 2. Subir
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/votos-app-99/odoo/odoo19-custom:latest']
 
+  # 3. Actualizar Kubernetes
   - name: 'gcr.io/cloud-builders/kubectl'
     args:
       - 'set'
@@ -19,6 +22,7 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=us-central1'
       - 'CLOUDSDK_CONTAINER_CLUSTER=odoo-cluster'
+      - 'CLOUDSDK_CORE_PROJECT=votos-app-99'
 
 options:
   logging: CLOUD_LOGGING_ONLY
