@@ -95,12 +95,12 @@
 
     <!-- Action -->
     <record id="action_wompi" model="ir.actions.act_window">
-        <field name="name">Wompi</field>
+        <field name="name">Wompi Bancolombia</field>
         <field name="res_model">wompi</field>
         <field name="view_mode">list,form,kanban,calendar,pivot</field>
     </record>
 
     <!-- Menu -->
-    <menuitem id="menu_wompi_root" name="Wompi"/>
+    <menuitem id="menu_wompi_root" name="Wompi Bancolombia"/>
     <menuitem id="menu_wompi_main" name="Records" parent="menu_wompi_root" action="action_wompi"/>
 </odoo>
